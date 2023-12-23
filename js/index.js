@@ -5,12 +5,16 @@ const score = document.querySelector('.score--value');
 const finalScore = document.querySelector('.final-score > span');
 const menu = document.querySelector('.menu-screen');
 const buttonPlay = document.querySelector('.btn-play');
+const btnLeft = document.querySelector('.btn-left');
+const btnRight = document.querySelector('.btn-right');
+const btnUp = document.querySelector('.btn-up');
+const btnDown = document.querySelector('.btn-down');
 
 const audio = new Audio('../audio/eat-cobra.mp3');
 
 const size = 30;// declaramos e tamanho do nosso quadrado para a cobra.
 
-const initialPosition = { x:270, y:240}
+const initialPosition = { x: 270, y: 240 }
 
 let snake = [//usamos uma array para especificar o tamanho e posição da nossa cobra.
     initialPosition
@@ -30,9 +34,9 @@ const randomPosition = () => {
 }
 
 const randomColor = () => {
-    const red = randomNumber(0,255);
-    const green = randomNumber(0,255);
-    const blue = randomNumber(0,255);
+    const red = randomNumber(0, 255);
+    const green = randomNumber(0, 255);
+    const blue = randomNumber(0, 255);
 
     return `rgb(${red}, ${green}, ${blue})`;
 }
@@ -46,8 +50,8 @@ const food = {
 let direction, loopId;
 
 const drawFood = () => {
-    
-    const  {x, y, color} = food;
+
+    const { x, y, color } = food;
     ctx.shadowColor = color;
     ctx.shadowBlur = 7;
     ctx.fillStyle = color;
@@ -59,7 +63,7 @@ const drawSnake = () => {//criamos uma função para adicionar cor e posição d
     ctx.fillStyle = "#ddd";//aqui declaramos a cor de cada posição da cobra
 
     snake.forEach((position, index) => {//criamos outra função para percorrer nossa array e trazer a posição de elemento da array. Usamos o index para diferencia nossa principal posição.
-        if(index === snake.length - 1){//criamos uma condição para percorrer nossa array e pegar a ultoma posição da array.
+        if (index === snake.length - 1) {//criamos uma condição para percorrer nossa array e pegar a ultoma posição da array.
             ctx.fillStyle = "gray";
         }
         ctx.fillRect(position.x, position.y, size, size)//declaramos a posição da array e tamanho dessas posiçoes.
@@ -68,31 +72,37 @@ const drawSnake = () => {//criamos uma função para adicionar cor e posição d
 
 const moveSnake = () => {
 
-    if(!direction) return
+    if (!direction) return
     const head = snake[snake.length - 1];//snake.at(-1);//pegamos o ultimo elemento usando a at(-1)
 
-    
-    if(direction == 'right') {
+
+    if (direction == 'right') {
         snake.push({ x: head.x + size, y: head.y });//esse metodo push adiciona um item a array.
     }
-    if(direction == 'left') {
+    if (direction == 'left') {
         snake.push({ x: head.x - size, y: head.y });//esse metodo push adiciona um item a array.
     }
-    if(direction == 'down') {
-        snake.push({ x: head.x, y: head.y + size});//esse metodo push adiciona um item a array.
+    if (direction == 'down') {
+        snake.push({ x: head.x, y: head.y + size });//esse metodo push adiciona um item a array.
     }
-    if(direction == 'up') {
-        snake.push({ x: head.x, y: head.y - size});//esse metodo push adiciona um item a array.
+    if (direction == 'up') {
+        snake.push({ x: head.x, y: head.y - size });//esse metodo push adiciona um item a array.
     }
 
     snake.shift()//essa metodo remove o primeiro elemento de uma array.
 };
 
+const moveSnakeMobile = () => {
+    if (!direction) return
+    const head = snake[snake.length - 1];
+}
+
+
 const drawGrid = () => {
     ctx.lineWidth = 1;
     ctx.strokeStyle = "#191913"
 
-    for(let i = 30; i < canvas.width; i += 30){
+    for (let i = 30; i < canvas.width; i += 30) {
         ctx.beginPath()
         ctx.lineTo(i, 0)
         ctx.lineTo(i, 600)
@@ -108,7 +118,7 @@ const drawGrid = () => {
 const checkEat = () => {
     const head = snake[snake.length - 1];
 
-    if(head.x == food.x && head.y == food.y) {
+    if (head.x == food.x && head.y == food.y) {
         incrementScore()
         snake.push(head)
         audio.play()
@@ -116,7 +126,7 @@ const checkEat = () => {
         let x = randomPosition();
         let y = randomPosition();
 
-        while(snake.find((position) => position.x == x && position.y == y)){
+        while (snake.find((position) => position.x == x && position.y == y)) {
             x = randomPosition();
             y = randomPosition();
         }
@@ -161,7 +171,8 @@ const gameLoop = () => {
     drawSnake();
     checkEat();
     checkCollision();
-    
+    moveSnakeMobile();
+
 
     loopId = setTimeout(() => {
         gameLoop()
@@ -171,23 +182,46 @@ const gameLoop = () => {
 gameLoop();
 
 document.addEventListener('keydown', ({ key }) => {
-    if(key == "ArrowRight" && direction != "left") {
+    if (key == "ArrowRight" && direction != "left") {
         direction = 'right';
     }
 
-    if(key == "ArrowLeft" && direction != "right") {
+    if (key == "ArrowLeft" && direction != "right") {
         direction = 'left';
     }
-    
-    if(key == "ArrowDown" && direction != "up") {
-        direction ='down';
+
+    if (key == "ArrowDown" && direction != "up") {
+        direction = 'down';
     }
 
-    if(key == "ArrowUp" && direction != "down") {
+    if (key == "ArrowUp" && direction != "down") {
         direction = 'up';
     }
-
 });
+
+
+btnLeft.addEventListener('click', () => {
+    if (direction != "rigth") {
+        direction = 'left';
+    }
+});
+btnRight.addEventListener('click', () => {
+    if (direction != "left") {
+        direction = 'right';
+    }
+});
+btnDown.addEventListener('click', () => {
+    if (direction != "up") {
+        direction = 'down';
+    }
+});
+btnUp.addEventListener('click', () => {
+    if (direction != "down") {
+        direction = 'up';
+    }
+});
+
+
 
 
 buttonPlay.addEventListener('click', () => {

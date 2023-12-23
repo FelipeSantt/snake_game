@@ -72,3 +72,57 @@ canvas {
     cursor: pointer;
     background-color: blueviolet;
 }
+
+.controlls {
+    display: none;
+    height: 55px;
+    align-items: center;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.controlls button {
+    border: none;
+    border-radius: 100px;
+    padding: 10px 15px 10px 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: aliceblue;
+    cursor: pointer;
+    background-color: blueviolet;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-down {
+    margin-top: 125px;
+    margin-left: 60px;
+    position: absolute;
+}
+
+.btn-left {
+    margin-top: 60px;
+}
+
+.btn-right {
+    margin-top: 60px;
+}
+
+@media (max-width: 460px) {
+    canvas{
+        width: 300px;
+    }
+
+    .controlls {
+        display: flex;
+    }
+
+    .score--value {
+        font-size: 3rem;
+    }
+
+    .game-over {
+        font-size: 2rem;
+    }
+}
